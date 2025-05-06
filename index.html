@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alyaqin Café</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f7f1e9;
+            color: #4b3f2f;
+        }
+        
+        .navbar {
+            background-color: #4b3f2f;
+        }
+        
+        .navbar-brand,
+        .nav-link {
+            color: #fff !important;
+        }
+        
+        .nav-link:hover {
+            color: #f7f1e9 !important;
+        }
+        
+        .hero {
+            background-image: url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+        }
+        
+        .menu-section,
+        .reservation-section,
+        .about-section,
+        .account-section,
+        .track-section,
+        .offers-section {
+            padding: 60px 0;
+            background-color: #fff;
+        }
+        
+        .menu-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: #f7f1e9;
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            transform: translateX(50px) scale(0.95);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .menu-item.visible {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+        }
+        
+        .menu-item.hidden {
+            opacity: 0;
+            transform: translateX(-50px) scale(0.95);
+            pointer-events: none;
+            display: none;
+        }
+        
+        .menu-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .menu-item img {
+            width: 100px;
+            height: 100px;
+            min-height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-right: 15px;
+            background-color: #e6e6e6;
+        }
+        
+        .filter-buttons {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .filter-btn {
+            background-color: #d4a373;
+            color: #fff;
+            border: none;
+            margin: 0 10px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .filter-btn:hover {
+            background-color: #e6b98a;
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(212, 163, 115, 0.5);
+        }
+        
+        .filter-btn.active {
+            background-color: #3c2f22;
+            color: #fff;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(60, 47, 34, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(60, 47, 34, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(60, 47, 34, 0);
+            }
+        }
+        
+        .add-to-cart {
+            background-color: #d4a373;
+            color: #fff;
+            border: none;
+            transition: transform 0.2s ease;
+        }
+        
+        .add-to-cart:hover {
+            background-color: #e6b98a;
+            transform: scale(1.1);
+        }
+        
+        .cart-icon {
+            position: relative;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #d4a373;
+            color: #fff;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+        
+        .cart-count.pop {
+            animation: pop 0.3s ease;
+        }
+        
+        @keyframes pop {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.5);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .cart-icon.shake {
+            animation: shake 0.5s ease;
+        }
+        
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            20%,
+            60% {
+                transform: translateX(-5px);
+            }
+            40%,
+            80% {
+                transform: translateX(5px);
+            }
+        }
+        
+        .reservation-section form,
+        .account-section form,
+        .track-section form {
+            max-width: 500px;
+            margin: auto;
+            background-color: #f7f1e9;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .reservation-section h2,
+        .account-section h2,
+        .track-section h2,
+        .offers-section h2 {
+            color: #d4a373;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: text-shadow 0.3s;
+        }
+        
+        .reservation-section h2:hover,
+        .account-section h2:hover,
+        .track-section h2:hover,
+        .offers-section h2:hover {
+            text-shadow: 0 0 10px rgba(212, 163, 115, 0.5);
+        }
+        
+        .form-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            color: #4b3f2f;
+            font-weight: bold;
+            font-size: 1rem;
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            transition: all 0.2s;
+            pointer-events: none;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #d4a373;
+            border-radius: 8px;
+            background-color: #fff;
+            font-size: 1rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 8px rgba(40, 167, 69, 0.3);
+            outline: none;
+        }
+        
+        .form-group input:focus+label,
+        .form-group input:not(:placeholder-shown)+label,
+        .form-group textarea:focus+label,
+        .form-group textarea:not(:placeholder-shown)+label {
+            top: -10px;
+            left: 10px;
+            font-size: 0.8rem;
+            background-color: #f7f1e9;
+            padding: 0 5px;
+            color: #28a745;
+        }
+        
+        .btn-form {
+            background-color: #d4a373;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 100%;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        
+        .btn-form:hover {
+            background-color: #e6b98a;
+            transform: scale(1.02);
+        }
+        
+        .btn-form:active {
+            transform: scale(0.98);
+        }
+        
+        .success-message {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #d4edda;
+            color: #155724;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        footer {
+            background-color: #4b3f2f;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+        /* Payment Modal Animation */
+        
+        .modal.fade .modal-dialog {
+            transform: translateY(-50px);
+            opacity: 0;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+        
+        .modal.show .modal-dialog {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        /* Payment Fields Animation */
+        
+        #paymentFields .mb-3 {
+            opacity: 0;
+            transform: translateX(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        #paymentFields .mb-3.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        /* Complete Payment Button Animation */
+        
+        .btn-payment {
+            background-color: #d4a373;
+            color: #fff;
+            border: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .btn-payment:hover {
+            background-color: #e6b98a;
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(212, 163, 115, 0.5);
+        }
+        
+        .cart-item-img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+            background-color: #e6e6e6;
+        }
+        
+        #couponInput {
+            margin-bottom: 10px;
+        }
+        
+        #couponMessage {
+            color: #d4a373;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        #trackResult {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f7f1e9;
+            display: none;
+        }
+        
+        .offers-section .offer-item {
+            background-color: #f7f1e9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .offers-section .offer-item h4 {
+            color: #d4a373;
+        }
+        
+        .offers-section .offer-item p {
+            color: #4b3f2f;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#home">Alyaqin Café</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#menu">Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#offers">Offers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#track">Track Order</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#account">Account</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link cart-icon" href="#" data-bs-toggle="modal" data-bs-target="#cartModal">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                            </svg>
+                            <span class="cart-count" id="cartCount">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div>
+            <h1>Alyaqin Café</h1>
+            <p>Your favorite spot for coffee and cozy vibes</p>
+            <a href="#menu" class="btn btn-light btn-lg mt-3">Explore Menu</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2 class="text-center mb-5">About Alyaqin Café</h2>
+            <p class="text-center">Alyaqin Café is your spot for great coffee and a cozy vibe. Since 2025, we serve tasty drinks and food with a smile. Come enjoy our warm atmosphere!</p>
+        </div>
+    </section>
+
+    <!-- Offers Section -->
+    <section id="offers" class="offers-section">
+        <div class="container">
+            <h2 class="text-center mb-5">Special Offers</h2>
+            <div class="row">
+                <div class="col-md-4 offer-item">
+                    <h4>Combo Deal</h4>
+                    <p>Get a Latte + Croissant for only 45 EGP!</p>
+                </div>
+                <div class="col-md-4 offer-item">
+                    <h4>Happy Hour</h4>
+                    <p>20% off all drinks from 3 PM to 5 PM daily.</p>
+                </div>
+                <div class="col-md-4 offer-item">
+                    <h4>Loyalty Program</h4>
+                    <p>Buy 9 coffees, get the 10th free!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="menu-section">
+        <div class="container">
+            <h2 class="text-center mb-5">Our Menu</h2>
+            <div class="filter-buttons">
+                <button class="btn filter-btn active" data-filter="all">All</button>
+                <button class="btn filter-btn" data-filter="drinks">Drinks</button>
+                <button class="btn filter-btn" data-filter="desserts">Desserts</button>
+                <button class="btn filter-btn" data-filter="food">Food</button>
+            </div>
+            <div class="row" id="menu-items">
+                <!-- Food -->
+                <div class="col-md-4 menu-item food">
+                    <img src="https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Turkey Club Sandwich">
+                    <div>
+                        <h4>Turkey Club Sandwich</h4>
+                        <p>Turkey, bacon, lettuce, and mayo - 50 EGP</p>
+                        <button class="btn add-to-cart" data-name="Turkey Club Sandwich" data-price="50" data-image="https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg?auto=compress&cs=tinysrgb&w=300">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="col-md-4 menu-item food">
+                    <img src="https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Margherita Pizza">
+                    <div>
+                        <h4>Margherita Pizza</h4>
+                        <p>Tomato, mozzarella, and basil - 60 EGP</p>
+                        <button class="btn add-to-cart" data-name="Margherita Pizza" data-price="60" data-image="https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress&cs=tinysrgb&w=300">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="col-md-4 menu-item food">
+                    <img src="https://images.pexels.com/photos/2097090/pexels-photo-2097090.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Croissant">
+                    <div>
+                        <h4>Croissant</h4>
+                        <p>Buttery and flaky croissant - 25 EGP</p>
+                        <button class="btn add-to-cart" data-name="Croissant" data-price="25" data-image="https://images.pexels.com/photos/2097090/pexels-photo-2097090.jpeg?auto=compress&cs=tinysrgb&w=300">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="col-md-4 menu-item food">
+                    <img src="https://images.pexels.com/photos/5560763/pexels-photo-5560763.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Chicken Caesar Salad">
+                    <div>
+                        <h4>Chicken Caesar Salad</h4>
+                        <p>Grilled chicken, romaine, croutons, and Caesar dressing - 45 EGP</p>
+                        <button class="btn add-to-cart" data-name="Chicken Caesar Salad" data-price="45" data-image="https://images.pexels.com/photos/5560763/pexels-photo-5560763.jpeg?auto=compress&cs=tinysrgb&w=300">Add to Cart</button>
+                    </div>
+                </div>
+                <!-- Drinks -->
+                <div class="col-md-4 menu-item drinks">
+                    <img src="https://images.pexels.com/photos/312420/pexels-photo-312420.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Espresso">
+                    <div>
+                        <h4>Espresso</h4>
+                        <p>Strong and bold espresso shot - 25 EGP</p>
+                        <button class="btn add-to-cart" data-name="Espresso" data-price="25" data-image="https://images.pexels.com/photos/312420/pexels-photo-312420.jpeg?auto=compress&cs=tinysrgb&w=300">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="col-md-4 menu-item drinks">
+                    <img src="https://images.pexels.com/photos/1233319/pexels-photo-1233319.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Mocha">
+                    <div>
+                        <h4>Mocha</h4>
+                        <p>Espresso with chocolate and milk - 35 EGP</p>
+                        <button class="btn add-to-cart" data-name="Mocha" data-price="35" data-image="https://images.pexels.com/photos/1233319/pexels-photo-1233319.jpeg?auto=compress&cs=tinysrgb&w=300">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="col-md-4 menu-item drinks">
+                    <img src="https://images.pexels.com/photos/982612/pexels-photo-982612.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Vanilla Latte">
+                    <div>
+                        <h4>Vanilla Latte</h4>
+                        <p>Espresso with vanilla and steamed milk - 32 EGP</p>
+                        <button class="btn add-to-cart" data-name="Vanilla Latte" data-price="32" data-image="https://images.pexels.com/photos/982612/pexels-photo-982612.jpeg?auto=compress&cs=tinysrgb&w=300">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="col-md-4 menu-item drinks">
+                    <img src="https://images.pexels.com/photos/414720/pexels-photo-414720.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Fresh Orange Juice">
+                    <div>
+                        <h4>Fresh Orange Juice</h4>
+                        <p>Freshly squeezed orange juice - 28 EGP</p>
+                        <button class="btn add-to-cart" data-name="Fresh Orange Juice" data-price="28" data-image="https://images.pexels.com/photos/414720/pexels-photo-414720.jpeg?auto=compress&cs=tinysrgb&w=300">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="col-md-4 menu-item drinks">
+                    <img src="https://images.pexels.com/photos/405091/pexels-photo-405091.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Strawberry Smoothie">
+                    <div>
+                        <h4>Strawberry Smoothie</h4>
+                        <p>Blended strawberries with yogurt - 35 EGP</p>
+                        <button class="btn add-to-cart" data-name="Strawberry Smoothie" data-price="35" data-image="https://images.pexels.com/photos/405091/pexels-photo-405091.jpeg?auto=compress&cs=tinysrgb&w=300">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="col-md-4 menu-item drinks">
+                    <img src="https://images.pexels.com/photos/1417945/pexels-photo-1417945.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Iced Tea">
+                    <div>
+                        <h4>Iced Tea</h4>
+                        <p>Refreshing lemon iced tea - 20 EGP</p>
+                        <button class="btn add-to-cart" data-name="Iced Tea" data-price="20" data-image="https://images.pexels.com/photos/1417945/pexels-photo-1417945.jpeg?auto=compress&cs=tinysrgb&w=300">Add to Cart</button>
+                    </div>
+                </div>
+                <!-- Desserts -->
+                <div class="col-md-4 menu-item desserts">
+                    <img src="https://images.pexels.com/photos/239578/pexels-photo-239578.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Brownie">
+                    <div>
+                        <h4>Brownie</h4>
+                        <p>Fudgy chocolate brownie - 30 EGP</p>
+                        <button class="btn add-to-cart" data-name="Brownie" data-price="30" data-image="https://images.pexels.com/photos/239578/pexels-photo-239578.jpeg?auto=compress&cs=tinysrgb&w=300">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="col-md-4 menu-item desserts">
+                    <img src="https://images.pexels.com/photos/2144112/pexels-photo-2144112.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Cheesecake">
+                    <div>
+                        <h4>Cheesecake</h4>
+                        <p>Creamy cheesecake with berry topping - 35 EGP</p>
+                        <button class="btn add-to-cart" data-name="Cheesecake" data-price="35" data-image="https://images.pexels.com/photos/2144112/pexels-photo-2144112.jpeg?auto=compress&cs=tinysrgb&w=300">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="col-md-4 menu-item desserts">
+                    <img src="https://images.pexels.com/photos/3026804/pexels-photo-3026804.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Chocolate Cake">
+                    <div>
+                        <h4>Chocolate Cake</h4>
+                        <p>Rich chocolate layered cake - 40 EGP</p>
+                        <button class="btn add-to-cart" data-name="Chocolate Cake" data-price="40" data-image="https://images.pexels.com/photos/3026804/pexels-photo-3026804.jpeg?auto=compress&cs=tinysrgb&w=300">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="reservation-section">
+        <div class="container">
+            <h2>Reserve Your Table</h2>
+            <form id="reservationForm">
+                <div class="form-group">
+                    <input type="text" id="name" required placeholder=" ">
+                    <label for="name">Name</label>
+                </div>
+                <div class="form-group">
+                    <input type="tel" id="phone" required placeholder=" ">
+                    <label for="phone">Phone Number</label>
+                </div>
+                <div class="form-group">
+                    <input type="date" id="date" required placeholder=" ">
+                    <label for="date">Reservation Date</label>
+                </div>
+                <button type="submit" class="btn btn-form">Submit Reservation</button>
+                <div class="success-message" id="reservationSuccess">Reservation submitted successfully!</div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Track Order Section -->
+    <section id="track" class="track-section">
+        <div class="container">
+            <h2>Track Your Order</h2>
+            <form id="trackForm">
+                <div class="form-group">
+                    <input type="text" id="orderId" required placeholder=" ">
+                    <label for="orderId">Order ID</label>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="trackEmail" required placeholder=" ">
+                    <label for="trackEmail">Email</label>
+                </div>
+                <button type="submit" class="btn btn-form">Track Order</button>
+                <div class="success-message" id="trackSuccess"></div>
+            </form>
+            <div id="trackResult"></div>
+        </div>
+    </section>
+
+    <!-- Account Section -->
+    <section id="account" class="account-section">
+        <div class="container">
+            <h2>Your Account</h2>
+            <form id="accountForm">
+                <div class="form-group">
+                    <input type="email" id="email" required placeholder=" ">
+                    <label for="email">Email</label>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" required placeholder=" ">
+                    <label for="password">Password</label>
+                </div>
+                <button type="submit" class="btn btn-form">Log In</button>
+                <div class="success-message" id="accountSuccess">Logged in successfully!</div>
+            </form>
+            <p class="text-center mt-3">Don't have an account? <a href="#">Create one</a></p>
+        </div>
+    </section>
+
+    <!-- Cart Modal -->
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">Your Cart</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Item</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cartItems">
+                            <!-- Cart items will be added here -->
+                        </tbody>
+                    </table>
+                    <p><strong>Subtotal: <span id="cartSubtotal">0</span> EGP</strong></p>
+                    <p><strong>Delivery Fee: <span id="deliveryFee">15</span> EGP</strong></p>
+                    <p><strong>Discount: <span id="cartDiscount">0</span> EGP</strong></p>
+                    <p><strong>Total: <span id="cartTotal">0</span> EGP</strong></p>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="couponInput" placeholder="Enter coupon code">
+                        <button class="btn btn-payment" type="button" id="applyCoupon">Apply Coupon</button>
+                    </div>
+                    <p id="couponMessage"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-payment" id="proceedToPayment" data-bs-toggle="modal" data-bs-target="#paymentModal">Proceed to Payment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentModalLabel">Payment Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="paymentForm">
+                        <div class="mb-3">
+                            <label for="paymentMethod" class="form-label">Payment Method</label>
+                            <select class="form-control" id="paymentMethod" required>
+                                <option value="" disabled selected>Select Payment Method</option>
+                                <option value="visa">Visa</option>
+                                <option value="fawry">Fawry</option>
+                                <option value="cash">Cash on Delivery</option>
+                            </select>
+                        </div>
+                        <div id="paymentFields">
+                            <!-- Payment fields will be dynamically added here -->
+                        </div>
+                        <button type="submit" class="btn btn-payment w-100">Complete Payment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Alyaqin Café © 2025 | Follow us on <a href="#" class="text-white">Instagram</a></p>
+    </footer>
+
+    <!-- Bootstrap JS and Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let cart = [];
+            let appliedCoupon = null;
+            const deliveryFee = 15;
+            let filterTimeout = null;
+
+            const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
+
+            // Filter buttons logic with animation
+            document.querySelectorAll('.filter-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const filter = button.getAttribute('data-filter');
+
+                    // Prevent multiple rapid clicks
+                    if (filterTimeout) clearTimeout(filterTimeout);
+
+                    // Update active button
+                    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    // Hide all items first
+                    document.querySelectorAll('.menu-item').forEach(item => {
+                        item.classList.remove('visible');
+                        item.classList.add('hidden');
+                    });
+
+                    // Show filtered items with staggered animation
+                    filterTimeout = setTimeout(() => {
+                        const items = document.querySelectorAll('.menu-item');
+                        items.forEach((item, index) => {
+                            if (filter === 'all' || item.classList.contains(filter)) {
+                                setTimeout(() => {
+                                    item.classList.remove('hidden');
+                                    item.classList.add('visible');
+                                }, index * 100); // Stagger by 100ms per item
+                            }
+                        });
+                    }, 500); // Matches CSS transition duration
+                });
+            });
+
+            // Initialize visible items on load
+            document.querySelectorAll('.menu-item').forEach((item, index) => {
+                setTimeout(() => {
+                    item.classList.add('visible');
+                }, index * 100);
+            });
+
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', () => {
+                    const name = button.getAttribute('data-name');
+                    const price = parseFloat(button.getAttribute('data-price'));
+                    const image = button.getAttribute('data-image');
+                    const existingItem = cart.find(item => item.name === name);
+
+                    if (existingItem) {
+                        existingItem.quantity++;
+                    } else {
+                        cart.push({
+                            name,
+                            price,
+                            image,
+                            quantity: 1
+                        });
+                    }
+
+                    // Trigger cart icon shake and count pop
+                    const cartIcon = document.querySelector('.cart-icon');
+                    const cartCount = document.querySelector('.cart-count');
+                    cartIcon.classList.add('shake');
+                    cartCount.classList.add('pop');
+                    setTimeout(() => {
+                        cartIcon.classList.remove('shake');
+                        cartCount.classList.remove('pop');
+                    }, 500);
+
+                    updateCart();
+                    cartModal.show();
+                });
+            });
+
+            const applyCouponButton = document.getElementById('applyCoupon');
+            if (applyCouponButton) {
+                applyCouponButton.addEventListener('click', () => {
+                    const couponCode = document.getElementById('couponInput').value.trim().toUpperCase();
+                    const couponMessage = document.getElementById('couponMessage');
+                    const validCoupons = {
+                        'ALY10': {
+                            type: 'percentage',
+                            value: 0.1,
+                            message: '10% discount applied!'
+                        },
+                        'ALY20': {
+                            type: 'fixed',
+                            value: 20,
+                            message: '20 EGP discount applied!'
+                        },
+                        'FREESHIP': {
+                            type: 'delivery',
+                            value: deliveryFee,
+                            message: 'Free shipping applied!'
+                        }
+                    };
+
+                    if (validCoupons[couponCode]) {
+                        appliedCoupon = validCoupons[couponCode];
+                        couponMessage.textContent = appliedCoupon.message;
+                        couponMessage.style.color = '#28a745';
+                    } else {
+                        appliedCoupon = null;
+                        couponMessage.textContent = 'Invalid coupon code';
+                        couponMessage.style.color = '#dc3545';
+                    }
+
+                    updateCart();
+                });
+            }
+
+            function updateCart() {
+                const cartItems = document.getElementById('cartItems');
+                const cartCount = document.getElementById('cartCount');
+                const cartSubtotal = document.getElementById('cartSubtotal');
+                const deliveryFeeDisplay = document.getElementById('deliveryFee');
+                const cartDiscount = document.getElementById('cartDiscount');
+                const cartTotal = document.getElementById('cartTotal');
+
+                cartItems.innerHTML = '';
+                let subtotal = 0;
+
+                cart.forEach((item, index) => {
+                    subtotal += item.price * item.quantity;
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><img src="${item.image}" class="cart-item-img" alt="${item.name}"></td>
+                        <td>${item.name}</td>
+                        <td>${item.price} EGP</td>
+                        <td>${item.quantity}</td>
+                        <td><button class="btn btn-danger btn-sm remove-item" data-index="${index}">Remove</button></td>
+                    `;
+                    cartItems.appendChild(row);
+                });
+
+                let discount = 0;
+                if (appliedCoupon) {
+                    if (appliedCoupon.type === 'percentage') {
+                        discount = subtotal * appliedCoupon.value;
+                    } else if (appliedCoupon.type === 'fixed') {
+                        discount = appliedCoupon.value;
+                    } else if (appliedCoupon.type === 'delivery') {
+                        discount = appliedCoupon.value;
+                    }
+                }
+
+                const finalDeliveryFee = appliedCoupon && appliedCoupon.type === 'delivery' ? 0 : deliveryFee;
+                const total = subtotal + finalDeliveryFee - discount;
+
+                cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+                cartSubtotal.textContent = subtotal.toFixed(2);
+                deliveryFeeDisplay.textContent = finalDeliveryFee.toFixed(2);
+                cartDiscount.textContent = discount.toFixed(2);
+                cartTotal.textContent = total.toFixed(2);
+
+                document.querySelectorAll('.remove-item').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const index = button.getAttribute('data-index');
+                        cart.splice(index, 1);
+                        updateCart();
+                    });
+                });
+            }
+
+            document.querySelectorAll('.menu-item img, .cart-item-img').forEach(img => {
+                img.addEventListener('error', () => {
+                    img.src = 'https://via.placeholder.com/100?text=Image+Not+Found';
+                    img.alt = 'Image not available';
+                });
+            });
+
+            const reservationForm = document.getElementById('reservationForm');
+            if (reservationForm) {
+                reservationForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const successMessage = document.getElementById('reservationSuccess');
+                    successMessage.style.display = 'block';
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                    }, 3000);
+                    this.reset();
+                });
+            }
+
+            const accountForm = document.getElementById('accountForm');
+            if (accountForm) {
+                accountForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const successMessage = document.getElementById('accountSuccess');
+                    successMessage.style.display = 'block';
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                    }, 3000);
+                    this.reset();
+                });
+            }
+
+            const trackForm = document.getElementById('trackForm');
+            if (trackForm) {
+                trackForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const orderId = document.getElementById('orderId').value.trim();
+                    const email = document.getElementById('trackEmail').value.trim().toLowerCase();
+                    const trackResult = document.getElementById('trackResult');
+                    const successMessage = document.getElementById('trackSuccess');
+
+                    const orders = [{
+                        id: '1001',
+                        email: 'test@example.com',
+                        status: 'Processing'
+                    }, {
+                        id: '1002',
+                        email: 'test@example.com',
+                        status: 'Shipped'
+                    }, {
+                        id: '1003',
+                        email: 'user@example.com',
+                        status: 'Delivered'
+                    }];
+
+                    const order = orders.find(o => o.id === orderId && o.email === email);
+
+                    if (order) {
+                        trackResult.style.display = 'block';
+                        trackResult.innerHTML = `<strong>Order Status:</strong> ${order.status}`;
+                        trackResult.style.backgroundColor = '#d4edda';
+                        trackResult.style.color = '#155724';
+                    } else {
+                        trackResult.style.display = 'block';
+                        trackResult.innerHTML = 'Order not found. Please check your Order ID and Email.';
+                        trackResult.style.backgroundColor = '#f8d7da';
+                        trackResult.style.color = '#721c24';
+                    }
+
+                    successMessage.style.display = 'block';
+                    successMessage.textContent = order ? 'Order tracked successfully!' : 'Please try again.';
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                        trackResult.style.display = 'none';
+                    }, 3000);
+                    this.reset();
+                });
+            }
+
+            const paymentMethodSelect = document.getElementById('paymentMethod');
+            const paymentFields = document.getElementById('paymentFields');
+
+            if (paymentMethodSelect) {
+                paymentMethodSelect.addEventListener('change', () => {
+                    const method = paymentMethodSelect.value;
+                    paymentFields.innerHTML = '';
+
+                    if (method === 'visa') {
+                        paymentFields.innerHTML = `
+                            <div class="mb-3">
+                                <label for="cardHolder" class="form-label">Cardholder Name</label>
+                                <input type="text" class="form-control" id="cardHolder" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="cardNumber" class="form-label">Card Number</label>
+                                <input type="text" class="form-control" id="cardNumber" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="expiryDate" class="form-label">Expiry Date</label>
+                                <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="cvv" class="form-label">CVV</label>
+                                <input type="text" class="form-control" id="cvv" required>
+                            </div>
+                        `;
+                    } else if (method === 'fawry') {
+                        paymentFields.innerHTML = `
+                            <div class="mb-3">
+                                <label for="phoneNumber" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phoneNumber" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="fawryCode" class="form-label">Fawry Payment Code</label>
+                                <input type="text" class="form-control" id="fawryCode" required>
+                            </div>
+                        `;
+                    } else if (method === 'cash') {
+                        paymentFields.innerHTML = `
+                            <div class="mb-3">
+                                <label for="deliveryAddress" class="form-label">Delivery Address</label>
+                                <textarea class="form-control" id="deliveryAddress" required></textarea>
+                            </div>
+                        `;
+                    }
+
+                    // Add stagger animation to fields
+                    const fields = paymentFields.querySelectorAll('.mb-3');
+                    fields.forEach((field, index) => {
+                        setTimeout(() => {
+                            field.classList.add('visible');
+                        }, index * 100);
+                    });
+                });
+            }
+
+            const paymentForm = document.querySelector('#paymentForm');
+            if (paymentForm) {
+                paymentForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const method = paymentMethodSelect.value;
+                    let message = `Payment completed successfully! Your Order ID is 100${Math.floor(Math.random() * 1000)}.`;
+                    if (method === 'cash') {
+                        message = `Order placed! You will pay on delivery. Your Order ID is 100${Math.floor(Math.random() * 1000)}.`;
+                    }
+                    alert(message);
+                    cart = [];
+                    appliedCoupon = null;
+                    document.getElementById('couponInput').value = '';
+                    document.getElementById('couponMessage').textContent = '';
+                    updateCart();
+                    this.reset();
+                    document.querySelectorAll('.btn-close').forEach(btn => btn.click());
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
